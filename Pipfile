@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flatten-json = "==0.1.13"
+pandas = "==1.2.3"
+numpy = "==1.20.1"
+boto3 = "==1.17.17"
+
+[dev-packages]
+pipenv-setup = "*"
+flake8 = "*"
+pytest = "==6.2.2"
+
+[requires]
+python_version = "3.8"

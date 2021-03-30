@@ -1,0 +1,14 @@
+.python
+python
+.pytest_cache
+__pycache__
+
+.reports
+
+.vscode
+.events
+
+.serverless
+.s3
+
+node_modules
