@@ -43,13 +43,6 @@ class TestFilenameInvestigator:
         with pytest.raises(Exception, match="foobar does not contain an extension"):
             filename_investigator.determine_extension(filename)
 
-    def test_determine_extension_works_when_no_raise(self):
-        # SETUP
-        filename = "foobar.txt"
-
-        # ASSERT
-        assert filename_investigator.determine_extension(filename) == ".txt"
-
     def test_determine_base_filename_works_when_raise(self):
         # SETUP
         filename = "foobar"
@@ -64,5 +57,3 @@ class TestFilenameInvestigator:
 
         # ASSERT
         assert filename_investigator.determine_base_filename(filename) == "foobar"
-
-

@@ -63,5 +63,3 @@ def process_page(options):
             'total_files': total_files + total_files_this_page,
             'starting_token': ''
         }
-
-
