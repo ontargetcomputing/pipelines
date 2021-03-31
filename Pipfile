@@ -12,7 +12,9 @@ boto3 = "==1.17.17"
 [dev-packages]
 pipenv-setup = "*"
 flake8 = "*"
-pytest = "==6.2.2"
+pytest = "*"
+pytest-html = "*"
+moto = "*"
 
 [requires]
 python_version = "3.8"
