@@ -87,3 +87,5 @@ When ready to deploy follow the steps below:
 
 2.  Push the commit to master
 3.  Push the tag.
+
+FORCE CHANGE
