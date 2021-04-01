@@ -26,7 +26,7 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="pipelines",  # Required
-    version="1.0.2",  # Required
+    version="1.0.3",  # Required
     packages=find_packages(
         where="src", exclude=["contrib", "docs", "tests"]
     ),  # Required
