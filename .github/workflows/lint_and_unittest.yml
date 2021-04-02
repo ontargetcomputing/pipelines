@@ -13,20 +13,19 @@ env:
 
 jobs:
   lint:
-    if: contains(github.event.pull_request.labels.*.name, 'some-defined-label')
     runs-on: ubuntu-latest   
     name: Lint the source
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ PYTHON_VERSION }}
+    - name: Set up Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ PYTHON_VERSION }}
+        python-version: ${{ env.PYTHON_VERSION }}
     - name: Checkout Lamb Westin GitHub Actions Repo
       uses: actions/checkout@v2
       with:
         repository: LambWestonIT/github-actions
-        ref: ${{ GITHUB_ACTIONS_VERSION }}
+        ref: ${{ env.GITHUB_ACTIONS_VERSION }}
         token: ${{ secrets.GIT_HUB_TOKEN }}
         path: .github/actions/github-actions 
     - name: Load the python dependencies
@@ -38,15 +37,17 @@ jobs:
     name: Run the unit tests
     steps:
     - uses: actions/checkout@v2   
-    - name: Set up Python ${{ PYTHON_VERSION }}
+      with:
+        ref: test_wf
+    - name: Set up Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ PYTHON_VERSION }}
+        python-version: ${{ env.PYTHON_VERSION }}
     - name: Checkout Lamb Westin GitHub Actions Repo
       uses: actions/checkout@v2
       with:
         repository: LambWestonIT/github-actions
-        ref: ${{ GITHUB_ACTIONS_VERSION }}
+        ref: ${{ env.GITHUB_ACTIONS_VERSION }}
         token: ${{ secrets.GIT_HUB_TOKEN }}
         path: .github/actions/github-actions 
     - name: Load the python dependencies

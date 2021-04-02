@@ -86,6 +86,5 @@ When ready to deploy follow the steps below:
 2.  Tag the commit with the same version you put in [setup.py](./setup.py).
 
 2.  Push the commit to master
-3.  Push the tag.
 
-FORCE CHANGE
+3.  Push the tag.
