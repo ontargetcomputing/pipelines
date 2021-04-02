@@ -1,0 +1,24 @@
+on:
+  pull_request:
+    branches:
+      - master
+    types: [opened, labeled, unlabeled, synchronize]
+
+jobs:
+  semver_label_check:
+    runs-on: ubuntu-latest   
+    name: Is the PR labeled (major, minor, patch) for semantic versioning
+    steps:
+    - uses: actions/checkout@v2  
+    - name: Checkout Lamb Westin GitHub Actions Repo
+      uses: actions/checkout@v2
+      with:
+        repository: LambWestonIT/github-actions
+        ref: 1.1.0
+        token: ${{ secrets.GIT_HUB_TOKEN }}
+        path: .github/actions/github-actions         
+    - name: Check for semver label
+      uses: ./.github/actions/github-actions/actions/github/label_check
+      with:
+        github-token: '${{ secrets.GIT_HUB_TOKEN }}'
+        valid-labels: 'major, minor, patch'  
