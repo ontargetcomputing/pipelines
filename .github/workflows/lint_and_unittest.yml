@@ -2,7 +2,10 @@ on:
   pull_request:
     branches:
       - master
-    types: [opened, synchronize]
+    # TODO : labeled is used to trigger a restest if this failed.  Find a way for limiting
+    # to specifically when we want a retest.  This will rerun when adding semver label and we
+    # don't want that
+    types: [opened, labeled, synchronize]
 
 env:
   GITHUB_ACTIONS_VERSION: 1.1.0
@@ -10,6 +13,7 @@ env:
 
 jobs:
   lint:
+    if: contains(github.event.pull_request.labels.*.name, 'some-defined-label')
     runs-on: ubuntu-latest   
     name: Lint the source
     steps:
