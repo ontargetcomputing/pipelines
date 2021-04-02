@@ -37,7 +37,7 @@ jobs:
     - name: Set up Python ${{ PYTHON_VERSION }}
       uses: actions/setup-python@v2
       with:
-        python-version: python-version: ${{ PYTHON_VERSION }}
+        python-version: ${{ PYTHON_VERSION }}
     - name: Checkout Lamb Westin GitHub Actions Repo
       uses: actions/checkout@v2
       with:
