@@ -1,0 +1,51 @@
+on:
+  pull_request:
+    branches:
+      - master
+    types: [opened, synchronize]
+
+env:
+  GITHUB_ACTIONS_VERSION: 1.1.0
+  PYTHON_VERSION: 3.8
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest   
+    name: Lint the source
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ PYTHON_VERSION }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ PYTHON_VERSION }}
+    - name: Checkout Lamb Westin GitHub Actions Repo
+      uses: actions/checkout@v2
+      with:
+        repository: LambWestonIT/github-actions
+        ref: ${{ GITHUB_ACTIONS_VERSION }}
+        token: ${{ secrets.GIT_HUB_TOKEN }}
+        path: .github/actions/github-actions 
+    - name: Load the python dependencies
+      uses: ./.github/actions/github-actions/actions/python/dependencies        
+    - name: Run linting tool
+      uses: ./.github/actions/github-actions/actions/python/lint
+  unittest:
+    runs-on: ubuntu-latest   
+    name: Run the unit tests
+    steps:
+    - uses: actions/checkout@v2   
+    - name: Set up Python ${{ PYTHON_VERSION }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: python-version: ${{ PYTHON_VERSION }}
+    - name: Checkout Lamb Westin GitHub Actions Repo
+      uses: actions/checkout@v2
+      with:
+        repository: LambWestonIT/github-actions
+        ref: ${{ GITHUB_ACTIONS_VERSION }}
+        token: ${{ secrets.GIT_HUB_TOKEN }}
+        path: .github/actions/github-actions 
+    - name: Load the python dependencies
+      uses: ./.github/actions/github-actions/actions/python/dependencies        
+    - name: Run unit tests
+      uses: ./.github/actions/github-actions/actions/python/unittest
