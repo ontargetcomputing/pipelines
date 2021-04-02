@@ -37,8 +37,6 @@ jobs:
     name: Run the unit tests
     steps:
     - uses: actions/checkout@v2   
-      with:
-        ref: test_wf
     - name: Set up Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v2
       with:
