@@ -5,50 +5,38 @@ on:
     # TODO : labeled is used to trigger a restest if this failed.  Find a way for limiting
     # to specifically when we want a retest.  This will rerun when adding semver label and we
     # don't want that
-    types: [opened, labeled, synchronize]
-
+    types: [opened, synchronize]
 env:
-  GITHUB_ACTIONS_VERSION: 1.1.0
-  PYTHON_VERSION: 3.8
-
+  GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
 jobs:
   lint:
-    runs-on: ubuntu-latest   
-    name: Lint the source
+    runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ env.PYTHON_VERSION }}
-      uses: actions/setup-python@v2
+    - uses: actions/checkout@v2 
+
+    - name: Install dependecies
+      uses: VaultVulp/action-pipenv@v2.0.1
       with:
-        python-version: ${{ env.PYTHON_VERSION }}
-    - name: Checkout Lamb Westin GitHub Actions Repo
-      uses: actions/checkout@v2
+        command: install -d
+    
+    - name: Lint
+      uses: VaultVulp/action-pipenv@v2.0.1
       with:
-        repository: LambWestonIT/github-actions
-        ref: ${{ env.GITHUB_ACTIONS_VERSION }}
-        token: ${{ secrets.GIT_HUB_TOKEN }}
-        path: .github/actions/github-actions 
-    - name: Load the python dependencies
-      uses: ./.github/actions/github-actions/actions/python/dependencies        
-    - name: Run linting tool
-      uses: ./.github/actions/github-actions/actions/python/lint
-  unittest:
-    runs-on: ubuntu-latest   
-    name: Run the unit tests
+        command: run lint
+
+  test:
+    runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v2   
-    - name: Set up Python ${{ env.PYTHON_VERSION }}
-      uses: actions/setup-python@v2
+    - uses: actions/checkout@v2 
+
+    - name: Install dependecies
+      uses: VaultVulp/action-pipenv@v2.0.1
       with:
-        python-version: ${{ env.PYTHON_VERSION }}
-    - name: Checkout Lamb Westin GitHub Actions Repo
-      uses: actions/checkout@v2
+        command: install -d
+    
+    - name: Test
+      uses: VaultVulp/action-pipenv@v2.0.1
       with:
-        repository: LambWestonIT/github-actions
-        ref: ${{ env.GITHUB_ACTIONS_VERSION }}
-        token: ${{ secrets.GIT_HUB_TOKEN }}
-        path: .github/actions/github-actions 
-    - name: Load the python dependencies
-      uses: ./.github/actions/github-actions/actions/python/dependencies        
-    - name: Run unit tests
-      uses: ./.github/actions/github-actions/actions/python/unittest
+        command: run tests

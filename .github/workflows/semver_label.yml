@@ -9,16 +9,8 @@ jobs:
     runs-on: ubuntu-latest   
     name: Is the PR labeled (major, minor, patch) for semantic versioning
     steps:
-    - uses: actions/checkout@v2  
-    - name: Checkout Lamb Westin GitHub Actions Repo
-      uses: actions/checkout@v2
-      with:
-        repository: LambWestonIT/github-actions
-        ref: 1.1.0
-        token: ${{ secrets.GIT_HUB_TOKEN }}
-        path: .github/actions/github-actions         
-    - name: Check for semver label
-      uses: ./.github/actions/github-actions/actions/github/label_check
-      with:
-        github-token: '${{ secrets.GIT_HUB_TOKEN }}'
-        valid-labels: 'major, minor, patch'  
+      - name: "Check for [major, minor, patch] label"
+        uses: yashhy/pr-label-check-and-comment-action@v1.0.1
+        with:
+          required_labels: 'major, minor, patch'
+          GITHUB_TOKEN: '${{secrets.GIT_HUB_TOKEN}}'

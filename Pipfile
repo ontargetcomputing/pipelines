@@ -17,4 +17,8 @@ pytest-html = "*"
 moto = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3"
+
+[scripts]
+lint = "flake8 . --count --show-source --statistics"
+tests = "pytest"
