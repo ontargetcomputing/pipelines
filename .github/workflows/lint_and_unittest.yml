@@ -6,8 +6,7 @@ on:
     # to specifically when we want a retest.  This will rerun when adding semver label and we
     # don't want that
     types: [opened, synchronize]
-env:
-  GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+
 jobs:
   lint:
     runs-on: ubuntu-latest

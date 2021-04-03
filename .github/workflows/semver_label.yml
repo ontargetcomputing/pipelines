@@ -13,4 +13,4 @@ jobs:
         uses: yashhy/pr-label-check-and-comment-action@v1.0.1
         with:
           required_labels: 'major, minor, patch'
-          GITHUB_TOKEN: '${{secrets.GIT_HUB_TOKEN}}'
+          GITHUB_TOKEN: '${{secrets.GITHUB_TOKEN}}'
