@@ -45,7 +45,7 @@ jobs:
       - name: Update Version file
         run: |
           cat version.py
-          echo "version: \"${{steps.next_version.outputs.version}}\"\n" > version.py
+          echo "version: \"${{steps.next_version.outputs.version}}\"" > version.py
           cat version.py
         shell: bash
       - name: Update version, tag, and push
@@ -54,6 +54,6 @@ jobs:
           add: 'version.py'
           author_name: ':octocat: Octocat :octocat:'
           branch: master
-          message: ':octocat:CI Update Version to ${{ steps.next_version.outputs.version }} :octocat:'
+          message: ':octocat: CI Update Version to ${{ steps.next_version.outputs.version }} :octocat:'
           push: true
           tag: '${{ steps.next_version.outputs.version }} --force'

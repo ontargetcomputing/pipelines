@@ -1,1 +1,1 @@
-version: "1.0.11"\n
+version: "1.0.11"

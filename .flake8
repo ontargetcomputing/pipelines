@@ -5,3 +5,4 @@ exclude =
   docs
   .git
   .github
+  version.py
