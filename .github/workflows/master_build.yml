@@ -11,6 +11,8 @@ jobs:
     name: Update Version and Tag
     steps:
       - uses: actions/checkout@v2 
+        with:
+          token: ${{ secrets.LW_GITHUB_TOKEN }}
       - uses: docker://agilepathway/pull-request-label-checker:v1.0.9
         with:
           one_of: major,minor,patch
@@ -43,7 +45,7 @@ jobs:
       - name: Update Version file
         run: |
           cat version.py
-          echo "version: \"${{steps.next_version.outputs.version}}\"" > version.py
+          echo "version: \"${{steps.next_version.outputs.version}}\"\n" > version.py
           cat version.py
         shell: bash
       - name: Update version, tag, and push
