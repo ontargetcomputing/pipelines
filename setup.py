@@ -8,6 +8,7 @@ Modified by Madoshakalaka@Github (dependency links added)
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
 from os import path
+from version import version
 
 # io.open is needed for projects that support Python 2.7
 # It ensures open() defaults to text mode with universal newlines,
@@ -26,7 +27,7 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="pipelines",  # Required
-    version="1.0.10",  # Required
+    version=version,  # Required
     packages=find_packages(
         where="src", exclude=["contrib", "docs", "tests"]
     ),  # Required
