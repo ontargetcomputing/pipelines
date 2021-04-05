@@ -51,7 +51,7 @@ jobs:
         with:
           add: 'version.py'
           author_name: ':octocat: Octocat :octocat:'
-          branch: release_package
+          branch: master
           message: ':octocat:CI Update Version to ${{ steps.next_version.outputs.version }} :octocat:'
           push: true
           tag: '${{ steps.next_version.outputs.version }} --force'
