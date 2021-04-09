@@ -51,7 +51,7 @@ jobs:
       - name: Update version, tag, and push
         uses: EndBug/add-and-commit@v7
         with:
-          add: 'version.py'
+          add: 'version.txt'
           author_name: ':octocat: Octocat :octocat:'
           branch: master
           message: ':octocat: CI Update Version to ${{ steps.next_version.outputs.version }} :octocat:'
