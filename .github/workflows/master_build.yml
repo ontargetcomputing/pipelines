@@ -44,9 +44,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}            
       - name: Update Version file
         run: |
-          cat version.py
-          echo "version: \"${{steps.next_version.outputs.version}}\"" > version.py
-          cat version.py
+          cat version.text
+          echo "\"${{steps.next_version.outputs.version}}\"" > version.txt
+          cat version.text
         shell: bash
       - name: Update version, tag, and push
         uses: EndBug/add-and-commit@v7
