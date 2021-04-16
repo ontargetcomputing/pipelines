@@ -2,12 +2,15 @@ from collections import OrderedDict
 from datetime import datetime
 import json
 import logging
+import os
 import sys
 sys.path.append("src")
 from pipelines.json.json_mutator import JsonMutator
+from pipelines.aws.dynamodb import DynamoDBService
 from pipelines.aws.s3 import S3Service
 from pipelines.lang.filename_investigator import FilenameInvestigator
 
+dynamodb_service = DynamoDBService()
 s3_service = S3Service()
 filename_investigator = FilenameInvestigator()
 
@@ -109,7 +112,7 @@ def convert_json_file_to_csv(bucket_name, filename, destination_bucket_name):
 
 
 def gather_and_write_telemetry(external_landing_bucket_name, filename, internal_landing_bucket_name, final_landing_bucket_name,
-                               consumption_bucket_name, consumption_final_extension, telemetry_bucket_name, telemetry_filename=None):
+                               consumption_bucket_name, consumption_final_extension, telemetry_bucket_name, dynamodb_data=None):
     original_metadata = s3_service.metadata(external_landing_bucket_name, filename)
 
     telemetry = OrderedDict()
@@ -136,21 +139,35 @@ def gather_and_write_telemetry(external_landing_bucket_name, filename, internal_
     json_mutator = JsonMutator(telemetry)
     csv = json_mutator.csv()
 
-    if telemetry_filename is None:
-        telemetry_filename = __create_telemetry_filename(filename)
-        telemetry_filename = telemetry_filename.replace(".", "_")
+    telemetry_filename_response = __create_telemetry_filename(filename)
+    telemetry_filename = telemetry_filename_response['filename']
+    telemetry_filename = telemetry_filename.replace(".", "_")
 
     filename_to_write = telemetry_filename
-    return s3_service.write_file(telemetry_bucket_name, f'{filename_to_write}.csv', csv)
+    response = s3_service.write_file(telemetry_bucket_name, f'{filename_to_write}.csv', csv)
+
+    if os.getenv("TRACK_LAST_TELEMETRY_WRITE", 'False').lower() in ('true', '1', 't'):
+        dynamodb_service.update_item(dynamodb_data['dynamodb_table_name'], dynamodb_data['dataset'], telemetry_filename_response['table'], datetime.now())
+
+    return response
 
 
 def __create_telemetry_filename(filename):
+    return_filename = filename
     first_slash = filename.find('/')
     if first_slash > 0:
         table = filename[0:first_slash]
         last_slash = filename.rfind('/')
         base = filename[0:last_slash + 1]
         root_filename = filename[last_slash + 1:]
-        return f'{base}{table}_{root_filename}'
+        return_filename = f'{base}{table}_{root_filename}'
+
+        return {
+            'filename': return_filename,
+            'table': table
+        }
     else:
-        return filename
+        return {
+            'filename': filename,
+            'table': 'unknown'
+        }
