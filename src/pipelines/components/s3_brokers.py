@@ -109,7 +109,7 @@ def convert_json_file_to_csv(bucket_name, filename, destination_bucket_name):
 
 
 def gather_and_write_telemetry(external_landing_bucket_name, filename, internal_landing_bucket_name, final_landing_bucket_name,
-                               consumption_bucket_name, consumption_final_extension, telemetry_bucket_name):
+                               consumption_bucket_name, consumption_final_extension, telemetry_bucket_name, telemetry_filename):
     original_metadata = s3_service.metadata(external_landing_bucket_name, filename)
 
     telemetry = OrderedDict()
@@ -136,5 +136,5 @@ def gather_and_write_telemetry(external_landing_bucket_name, filename, internal_
     json_mutator = JsonMutator(telemetry)
     csv = json_mutator.csv()
 
-    filename_to_write = filename.replace(".", "_")
+    filename_to_write = telemetry_filename.replace(".", "_")
     return s3_service.write_file(telemetry_bucket_name, f'{filename_to_write}.csv', csv)
