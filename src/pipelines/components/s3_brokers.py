@@ -149,6 +149,10 @@ def gather_and_write_telemetry(filename, external_landing_bucket_name, internal_
         telemetry['error_code'] = None
         telemetry['error_message'] = None
     else:
+        telemetry['staging_location'] = None
+        telemetry['consumption_location'] = None
+        telemetry['consumption_received'] = None
+        telemetry['consumption_filesize'] = None
         telemetry['successful_processed'] = 'false'
         telemetry['process_completion'] = None
         telemetry['error_code'] = error['code']
