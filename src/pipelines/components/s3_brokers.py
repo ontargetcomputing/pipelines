@@ -110,7 +110,7 @@ def convert_json_file_to_csv(bucket_name, filename, destination_bucket_name):
     return response
 
 
-def gather_and_write_telemetry(filename, external_landing_bucket_name, internal_landing_bucket_name, final_landing_bucket_name,
+def gather_and_write_telemetry(dataset, filename, external_landing_bucket_name, internal_landing_bucket_name, final_landing_bucket_name,
                                consumption_bucket_name, consumption_final_extension, telemetry_bucket_name, error=None):
     original_metadata = s3_service.metadata(external_landing_bucket_name, filename)
 
@@ -118,7 +118,7 @@ def gather_and_write_telemetry(filename, external_landing_bucket_name, internal_
 
     telemetry['guid'] = filename_investigator.determine_simple_base_filename(filename)
     telemetry['filetype'] = original_metadata.content_type
-    telemetry['table_name'] = filename_investigator.determine_root_directory(filename)
+    telemetry['table_name'] = '{}_{}'.format(dataset, filename_investigator.determine_root_directory(filename))
     telemetry['external_location'] = 's3://{}/{}'.format(external_landing_bucket_name, filename)
     telemetry['version'] = original_metadata.version_id
     telemetry['external_received'] = original_metadata.last_modified
