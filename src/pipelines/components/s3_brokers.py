@@ -2,7 +2,6 @@ from collections import OrderedDict
 from datetime import datetime
 import json
 import logging
-import os
 import sys
 sys.path.append("src")
 from pipelines.json.json_mutator import JsonMutator
@@ -111,30 +110,51 @@ def convert_json_file_to_csv(bucket_name, filename, destination_bucket_name):
     return response
 
 
-def gather_and_write_telemetry(external_landing_bucket_name, filename, internal_landing_bucket_name, final_landing_bucket_name,
-                               consumption_bucket_name, consumption_final_extension, telemetry_bucket_name, dynamodb_data=None):
+def gather_and_write_telemetry(filename, external_landing_bucket_name, internal_landing_bucket_name, final_landing_bucket_name,
+                               consumption_bucket_name, consumption_final_extension, telemetry_bucket_name, error=None):
     original_metadata = s3_service.metadata(external_landing_bucket_name, filename)
 
     telemetry = OrderedDict()
 
-    telemetry['original_landed_time'] = original_metadata.last_modified
-    telemetry['original_e_tag'] = original_metadata.e_tag
-    telemetry['original_filesize'] = original_metadata.content_length
-    telemetry['original_filetype'] = original_metadata.content_type
+    telemetry['guid'] = filename_investigator.determine_simple_base_filename(filename)
+    telemetry['filetype'] = original_metadata.content_type
+    telemetry['table_name'] = filename_investigator.determine_root_directory(filename)
+    telemetry['external_location'] = 's3://{}/{}'.format(external_landing_bucket_name, filename)
+    telemetry['version'] = original_metadata.version_id
+    telemetry['external_received'] = original_metadata.last_modified
+    telemetry['external_filesize'] = original_metadata.content_length
 
     internal_metadata = s3_service.metadata(internal_landing_bucket_name, filename)
-    telemetry['internal_landed_time'] = internal_metadata.last_modified
-    final_metadata = s3_service.metadata(final_landing_bucket_name, filename)
-    telemetry['final_landed_time'] = final_metadata.last_modified
-    telemetry['final_filesize'] = final_metadata.content_length
-    if consumption_final_extension is not None:
-        stripped_filename = filename_investigator.determine_base_filename(filename)
-        consumption_filename = f'{stripped_filename}{consumption_final_extension}'
+    telemetry['internal_location'] = 's3://{}/{}'.format(internal_landing_bucket_name, filename)
+    telemetry['internal_received'] = internal_metadata.last_modified
+
+    if error is None:
+        telemetry['staging_location'] = 's3://{}/{}'.format(final_landing_bucket_name, filename)
+
+        if consumption_final_extension is not None:
+            stripped_filename = filename_investigator.determine_base_filename(filename)
+            print(stripped_filename)
+            consumption_filename = f'{stripped_filename}{consumption_final_extension}'
+        else:
+            consumption_filename = filename
+
+        consumption_metadata = s3_service.metadata(consumption_bucket_name, consumption_filename)
+
+        telemetry['consumption_location'] = 's3://{}/{}'.format(consumption_bucket_name, consumption_filename)
+        telemetry['consumption_received'] = consumption_metadata.last_modified
+        telemetry['consumption_filesize'] = consumption_metadata.content_length
+
+        telemetry['successful_processed'] = 'true'
+        telemetry['process_completion'] = consumption_metadata.last_modified
+        telemetry['error_code'] = None
+        telemetry['error_message'] = None
     else:
-        consumption_filename = filename
-    consumption_metadata = s3_service.metadata(consumption_bucket_name, consumption_filename)
-    telemetry['consumption_landed_time'] = consumption_metadata.last_modified
-    telemetry['consumption_filesize'] = consumption_metadata.content_length
+        telemetry['successful_processed'] = 'false'
+        telemetry['process_completion'] = None
+        telemetry['error_code'] = error['code']
+        telemetry['error_message'] = error['message']
+
+    print(telemetry)
 
     json_mutator = JsonMutator(telemetry)
     csv = json_mutator.csv()
@@ -145,9 +165,6 @@ def gather_and_write_telemetry(external_landing_bucket_name, filename, internal_
 
     filename_to_write = telemetry_filename
     response = s3_service.write_file(telemetry_bucket_name, f'{filename_to_write}.csv', csv)
-
-    if os.getenv("TRACK_LAST_TELEMETRY_WRITE", 'False').lower() in ('true', '1', 't'):
-        dynamodb_service.update_item(dynamodb_data['dynamodb_table_name'], dynamodb_data['dataset'], telemetry_filename_response['table'], datetime.now())
 
     return response
 

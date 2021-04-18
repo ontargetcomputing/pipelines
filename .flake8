@@ -6,3 +6,4 @@ exclude =
   .git
   .github
   version.py
+  .tests

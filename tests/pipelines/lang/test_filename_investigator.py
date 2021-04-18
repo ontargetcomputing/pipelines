@@ -57,3 +57,32 @@ class TestFilenameInvestigator:
 
         # ASSERT
         assert filename_investigator.determine_base_filename(filename) == "foobar"
+
+    def test_determine_simple_base_filename_works_with_slash(self):
+        # SETUP
+        filename = "farm/foobar1/foobar.txt"
+
+        # ASSERT
+        assert filename_investigator.determine_simple_base_filename(filename) == "foobar"
+
+    def test_determine_simple_base_filename_works_without_slash(self):
+        # SETUP
+        filename = "foobar.txt"
+
+        # ASSERT
+        assert filename_investigator.determine_simple_base_filename(filename) == "foobar"
+
+    def test_determine_root_directory_works_when_no_raise(self):
+        # SETUP
+        filename = "foo/bar/foobar.txt"
+
+        # ASSERT
+        assert filename_investigator.determine_root_directory(filename) == "foo"
+
+    def test_determine_root_directory_works_when_raise(self):
+        # SETUP
+        filename = "foobar.txt"
+
+        # ASSERT
+        with pytest.raises(Exception, match="foobar.txt is not within a directory"):
+            filename_investigator.determine_root_directory(filename)

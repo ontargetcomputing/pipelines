@@ -20,7 +20,24 @@ class FilenameInvestigator:
             raise Exception(f'{filename} does not contain an extension')
 
     def determine_base_filename(self, filename):
-        if filename.find(".") > 0:
-            return filename[0: filename.find(".")]
+        period_location = filename.find(".")
+        if period_location > 0:
+            return filename[0: period_location]
         else:
             raise Exception(f'{filename} does not contain an extension')
+
+    def determine_simple_base_filename(self, filename):
+        base_filename = self.determine_base_filename(filename)
+
+        last_forward_slash = base_filename.rfind("/")
+        if last_forward_slash > 0:
+            return base_filename[last_forward_slash + 1:]
+        else:
+            return base_filename
+
+    def determine_root_directory(self, filename):
+        first_forward_slash = filename.find("/")
+        if first_forward_slash > 0:
+            return filename[0:first_forward_slash]
+        else:
+            raise Exception(f'{filename} is not within a directory')
