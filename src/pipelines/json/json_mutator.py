@@ -58,7 +58,7 @@ class JsonMutator:
         current_dict[node_key] = value
 
     def csv(self):
-        df = pd.DataFrame(list(self.json_obj.items())).T
+        df = pd.DataFrame(list(self.json_obj.values())).T
         return df.to_csv(index=False, header=False)
 
     def json(self):

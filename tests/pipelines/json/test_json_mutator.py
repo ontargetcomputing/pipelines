@@ -150,7 +150,7 @@ class TestJsonMutator:
         json_mutator = JsonMutator(obj)
         csv = json_mutator.csv()
 
-        expected_csv = "bar,bang,centroid2,one\nwhiz,wow,aaa,more\n"
+        expected_csv = "whiz,wow,aaa,more\n"
 
         # ASSERT
         assert csv == expected_csv
