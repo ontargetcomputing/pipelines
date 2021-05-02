@@ -111,7 +111,7 @@ def convert_json_file_to_csv(bucket_name, filename, destination_bucket_name):
 
 
 def gather_and_write_telemetry(dataset, filename, external_landing_bucket_name, internal_landing_bucket_name, final_landing_bucket_name,
-                               consumption_bucket_name, consumption_final_extension, telemetry_bucket_name, error=None):
+                               consumption_bucket_name, consumption_final_extension, telemetry_bucket_name, telemetry_bucket_folder, error=None):
     original_metadata = s3_service.metadata(external_landing_bucket_name, filename)
 
     telemetry = OrderedDict()
@@ -169,7 +169,7 @@ def gather_and_write_telemetry(dataset, filename, external_landing_bucket_name, 
     telemetry_filename = telemetry_filename.replace(".", "_")
 
     filename_to_write = telemetry_filename
-    response = s3_service.write_file(telemetry_bucket_name, f'{filename_to_write}.csv', csv)
+    response = s3_service.write_file(telemetry_bucket_name, f'{telemetry_bucket_folder}{filename_to_write}.csv', csv)
 
     return response
 
