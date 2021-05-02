@@ -111,7 +111,7 @@ def convert_json_file_to_csv(bucket_name, filename, destination_bucket_name):
 
 
 def gather_and_write_telemetry(dataset, filename, external_landing_bucket_name, internal_landing_bucket_name, final_landing_bucket_name,
-                               consumption_bucket_name, consumption_final_extension, telemetry_bucket_name, telemetry_bucket_folder, error=None):
+                               consumption_bucket_name, consumption_bucket_folder, consumption_final_extension, telemetry_bucket_name, telemetry_bucket_folder, error=None):
     original_metadata = s3_service.metadata(external_landing_bucket_name, filename)
 
     telemetry = OrderedDict()
@@ -139,7 +139,9 @@ def gather_and_write_telemetry(dataset, filename, external_landing_bucket_name, 
         else:
             consumption_filename = filename
 
-        consumption_metadata = s3_service.metadata(consumption_bucket_name, consumption_filename)
+        print('*****cons=' + consumption_bucket_name)
+        print('the filename=' + f'{consumption_bucket_folder}{consumption_filename}')
+        consumption_metadata = s3_service.metadata(consumption_bucket_name, f'{consumption_bucket_folder}{consumption_filename}')
 
         telemetry['consumption_location'] = 's3://{}/{}'.format(consumption_bucket_name, consumption_filename)
         telemetry['consumption_received'] = consumption_metadata.last_modified
