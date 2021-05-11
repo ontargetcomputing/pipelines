@@ -15,7 +15,13 @@ filename_investigator = FilenameInvestigator()
 
 
 def corresponding_json_file_exists(bucket_name, non_json_filename, exists_check):
-    stripped_filename = filename_investigator.determine_base_filename(non_json_filename)
+    try:
+        stripped_filename = filename_investigator.determine_base_filename(non_json_filename)
+    except Exception:
+        root_directory = filename_investigator.determine_root_directory(non_json_filename)
+        non_json_filename_minus_root_directory = non_json_filename[len(root_directory) + 1:]
+        stripped_filename = filename_investigator.determine_root_directory(non_json_filename_minus_root_directory)
+
     json_filename = f'{stripped_filename}.json'
     logging.debug(f'Checking for existence of {bucket_name}/{json_filename}, corresponding to {non_json_filename}')
     exists = s3_service.file_exists(bucket_name, json_filename)
