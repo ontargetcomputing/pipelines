@@ -115,8 +115,10 @@ def gather_and_write_telemetry(dataset, filename, external_landing_bucket_name, 
     original_metadata = s3_service.metadata(external_landing_bucket_name, filename)
 
     telemetry = OrderedDict()
-
-    telemetry['guid'] = filename_investigator.determine_simple_base_filename(filename)
+    try:
+        telemetry['guid'] = filename_investigator.determine_simple_base_filename(filename)
+    except Exception:
+        telemetry['guid'] = filename
     telemetry['filetype'] = original_metadata.content_type
     telemetry['dataset'] = dataset
     telemetry['table_name'] = '{}_{}'.format(dataset, filename_investigator.determine_root_directory(filename))
@@ -144,6 +146,7 @@ def gather_and_write_telemetry(dataset, filename, external_landing_bucket_name, 
         consumption_metadata = s3_service.metadata(consumption_bucket_name, f'{consumption_bucket_folder}{consumption_filename}')
 
         telemetry['consumption_location'] = 's3://{}/{}'.format(consumption_bucket_name, consumption_filename)
+        print('*********************' + telemetry['consumption_location'])
         telemetry['consumption_received'] = consumption_metadata.last_modified
         telemetry['consumption_filesize'] = consumption_metadata.content_length
 
