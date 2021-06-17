@@ -42,7 +42,7 @@ class JsonMutator:
         if match is not None:
             while match is not None:
                 logging.debug(f'Match {match.group(0)}')
-                replacement = f'"{match.group(1)}_latitude": "{match.group(2)}",\n"{match.group(1)}_longitude": "{match.group(3)}"{match.group(4)}'
+                replacement = f'"{match.group(1)}_latitude": "{match.group(3)}",\n"{match.group(1)}_longitude": "{match.group(2)}"{match.group(4)}'
                 json_string = json_string.replace(match.group(0), replacement)
                 match = next(matches, None)
 

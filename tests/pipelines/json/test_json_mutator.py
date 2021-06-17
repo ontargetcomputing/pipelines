@@ -83,13 +83,13 @@ class TestJsonMutator:
             "foo": {
                 "bar": "whiz",
                 "bang": "wow",
-                "centroid2_latitude": "222.8692741460109",
-                "centroid2_longitude": "33.69003107655638"
+                "centroid2_latitude": "33.69003107655638",
+                "centroid2_longitude": "222.8692741460109"
             },
             "extra": {
                 "bar": "whiz2",
-                "centroid_latitude": "119.8692741460109",
-                "centroid_longitude": "46.69003107655638"
+                "centroid_latitude": "46.69003107655638",
+                "centroid_longitude": "119.8692741460109"
             }
         }
         # EXECUTE
@@ -119,14 +119,14 @@ class TestJsonMutator:
             "foo": {
                 "bar": "whiz",
                 "bang": "wow",
-                "centroid2_latitude": "222.8692741460109",
-                "centroid2_longitude": "33.69003107655638",
+                "centroid2_latitude": "33.69003107655638",
+                "centroid2_longitude": "222.8692741460109",
                 "one": "more"
             },
             "extra": {
                 "bar": "whiz2",
-                "centroid_latitude": "119.8692741460109",
-                "centroid_longitude": "46.69003107655638",
+                "centroid_latitude": "46.69003107655638",
+                "centroid_longitude": "119.8692741460109",
             }
         }
         # EXECUTE
