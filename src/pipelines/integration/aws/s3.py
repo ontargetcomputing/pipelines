@@ -4,6 +4,10 @@ import logging
 
 
 class S3Service:
+    """
+    Initializes an S3 service.
+    """
+
     def __init__(self, region='us-east-1', s3_local=None):
         self.session = boto3.Session()
         if s3_local is not None:
@@ -19,23 +23,9 @@ class S3Service:
             self.client = boto3.client("s3", region_name=region)
             self.resource = self.session.resource('s3', region_name=region)
 
-    # def __init__(self, region, s3_local):
-    #     # TODO : pass these parameters in
-    #     region = os.environ['region']
-    #     use_local_s3 = os.environ['use_local_s3']
-    #     self.session = boto3.Session()
-    #     if use_local_s3 == 'true':
-    #         endpoint_url = os.environ['local_s3_endpoint_url']
-    #         local_s3_aws_access_key = os.environ['local_s3_aws_access_key']
-    #         local_s3_aws_secret_access_key = os.environ['local_s3_aws_secret_access_key']
-
-    #         logging.debug(f'\nUsing local s3 with {endpoint_url} in {region}')
-    #         self.client = boto3.client("s3", region_name=region, endpoint_url=endpoint_url, aws_access_key_id=local_s3_aws_access_key, aws_secret_access_key=local_s3_aws_secret_access_key)
-    #         self.resource = self.session.resource('s3', region_name=region, endpoint_url=endpoint_url, aws_access_key_id=local_s3_aws_access_key, aws_secret_access_key=local_s3_aws_secret_access_key)
-    #     else:
-    #         logging.debug('\nNot using local s3')
-    #         self.client = boto3.client("s3", region_name=region)
-    #         self.resource = self.session.resource('s3', region_name=region)
+    """
+    Copy a file located in S3 to another location in S3
+    """
 
     def copy_file(self, source_bucket, source_key, destination_bucket, destination_key):
         logging.debug(f'Copying {source_bucket}/{source_key} to {destination_bucket}/{destination_key}')
@@ -48,6 +38,10 @@ class S3Service:
         obj = bucket.Object(destination_key)
         obj.copy(copy_source)
         return True
+
+    """
+    Checks the existence of a file in S3
+    """
 
     def file_exists(self, bucket_name, key):
         bucket = self.resource.Bucket(bucket_name)
@@ -64,10 +58,18 @@ class S3Service:
         else:
             return True
 
+    """
+    Gets the contents of a file in S3
+    """
+
     def get_file_contents(self, bucket_name, key):
         bucket = self.resource.Bucket(bucket_name)
         obj = bucket.Object(key)
         return obj.get()['Body'].read().decode("utf-8")
+
+    """
+    Lists a page of objects in a bucket.
+    """
 
     def list_objects_page(self, bucket_name, page_size, starting_token=""):
         paginator = self.client.get_paginator('list_objects')
@@ -80,6 +82,10 @@ class S3Service:
 
         page_iter = iter(paginator.paginate(Bucket=bucket_name, PaginationConfig=pagination_config))
         return next(page_iter)
+
+    """
+    Writes content to a file in S3
+    """
 
     def write_file(self, bucket_name, key, content):
         logging.debug(f'Writing to {bucket_name}/{key}')
@@ -100,6 +106,10 @@ class S3Service:
         }
 
     # TODO : unit test this
+    """
+    Returns the metadata of an object in S3
+    """
+
     def metadata(self, bucket_name, key):
         logging.debug(f'Obtaining metadata {bucket_name}/{key}')
         return self.resource.Object(bucket_name, key)

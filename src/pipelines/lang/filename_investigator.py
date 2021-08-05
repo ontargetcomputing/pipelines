@@ -6,12 +6,6 @@ class FilenameInvestigator:
         filetypes_tuple = tuple(filetypes.split(','))
         return filename.endswith(filetypes_tuple)
 
-    # def replace_extension_if_filetype(self, filename, filetype, new_filetype):
-    #     if filename.endswith(filetype):
-    #         return new_filetype.join(filename.rsplit(filetype, 1))
-    #     else:
-    #         raise Exception(f'{filename} does not end with {filetype}')
-
     def determine_extension(self, filename):
         if filename.find(".") > 0:
             last_index = filename.rindex(".")

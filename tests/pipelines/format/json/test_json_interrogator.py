@@ -1,11 +1,31 @@
 import pytest
 import sys
 sys.path.append("src")
-from pipelines.json.json_interrogator import JsonInterrogator
+from pipelines.format.json.json_interrogator import JsonInterrogator
 
 
 @pytest.mark.json_interrogator
 class TestJsonInterrogator:
+    def test_path_not_exists(self):
+        # SETUP
+        json_obj = {
+            "outer": {
+                "inner": {
+                    "foo": {
+                        "bar": "whizbang"
+                    },
+                    "hello": "world"
+                }
+            }
+        }
+
+        # EXECUTE
+        json_interrogator = JsonInterrogator()
+        exists = json_interrogator.path_exists(json_obj, "notfound")
+
+        # ASSERT
+        assert exists is False
+
     def test_path_exists_top_level(self):
         # SETUP
         json_obj = {

@@ -4,12 +4,12 @@ import os
 import pytest
 import sys
 sys.path.append("src")
-from pipelines.aws.s3 import S3Service
+from pipelines.integration.aws.s3 import S3Service
 
 REGION = "us-east-1"
 
 
-@pytest.mark.s3
+@pytest.mark.aws
 class TestS3:
     def test_write_file(self, s3_client, s3_resource):
         # SETUP

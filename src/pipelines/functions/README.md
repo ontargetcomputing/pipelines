@@ -1,0 +1,3 @@
+# functions
+
+This area contains various functions to be used in a data pipeline.  As of July 2021, this is referring to lambda functions used as part of larger step functions for manipulating and moving data around in AWS for ingestion into SnowFlake.  The idea is to decouple the actual work from the lambda functions so in theory they can be more easily reused.  In many cases, functions just wrap some functionality of other utilities in this repository just to make life easier for the client.

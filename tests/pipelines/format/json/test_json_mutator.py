@@ -1,11 +1,35 @@
 import pytest
 import sys
 sys.path.append("src")
-from pipelines.json.json_mutator import JsonMutator
+from pipelines.format.json.json_mutator import JsonMutator
 
 
 @pytest.mark.json_mutator
 class TestJsonMutator:
+    def test_insert_value_to_path_in_new_object(self):
+        # SETUP
+        json_obj = {
+            "outer": {
+                "inner": {
+                    "foo": {
+                        "bar": "whizbang"
+                    },
+                    "hello": "world"
+                }
+            }
+        }
+
+        path = "outer.inner.foo2.bar"
+        value = "foo2 bar"
+
+        # EXECUTE
+        json_mutator = JsonMutator(json_obj)
+        json_mutator.insert_value_to_path(path, value)
+        updated_json_obj = json_mutator.json()
+
+        # ASSERT
+        assert updated_json_obj['outer']['inner']['foo2']['bar'] == value
+
     def test_insert_value_to_path(self):
         # SETUP
         json_obj = {

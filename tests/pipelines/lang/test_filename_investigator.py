@@ -58,6 +58,14 @@ class TestFilenameInvestigator:
         # ASSERT
         assert filename_investigator.determine_base_filename(filename) == "foobar"
 
+    def test_determine_base_filename_works_when_no_extension(self):
+        # SETUP
+        filename = "foobar"
+
+        # ASSERT
+        with pytest.raises(Exception):
+            filename_investigator.determine_base_filename(filename)
+
     def test_determine_simple_base_filename_works_with_slash(self):
         # SETUP
         filename = "farm/foobar1/foobar.txt"

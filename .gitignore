@@ -2,6 +2,7 @@
 python
 .pytest_cache
 __pycache__
+.coverage
 
 .reports
 .tests
@@ -13,3 +14,5 @@ __pycache__
 .s3
 
 node_modules
+
+*.icloud
