@@ -1,8 +1,8 @@
 from collections import OrderedDict
 import sys
 sys.path.append("src")
-from pipelines.json.json_mutator import JsonMutator
-from pipelines.aws.s3 import S3Service
+from pipelines.format.json.json_mutator import JsonMutator
+from pipelines.integration.aws.s3 import S3Service
 from pipelines.lang.filename_investigator import FilenameInvestigator
 
 s3_service = S3Service()
