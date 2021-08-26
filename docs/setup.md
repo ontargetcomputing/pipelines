@@ -36,17 +36,23 @@ These instructions do not include installation of a IDE or editor.  I use [VS Co
 		
 		`$ source ~/.bashrc`
 		
-	3. **Confirm your python path**		
-		
-		```	
-		$ which python
-		/Users/my_username/.pyenv/shims/python
-		```
 		
 	4. **Install Python 3.8.0**
 
 		`$ pyenv install 3.8.0`
 
+
+	5. **Use Python 3.8.0**
+
+		`$ pyenv global 3.8.0`
+
+
+	5. **Confirm your python path**		
+		
+		```	
+		$ which python
+		/Users/my_username/.pyenv/shims/python
+		```
 
 At this point your machine should be setup for local development.  Please refer back to the main [README](../README.md) for details on doing development locally.
 	
