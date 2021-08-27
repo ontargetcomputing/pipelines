@@ -54,5 +54,11 @@ These instructions do not include installation of a IDE or editor.  I use [VS Co
 		/Users/my_username/.pyenv/shims/python
 		```
 
+	5. **Install pipenv**		
+		
+		```	
+		$ brew install pipenv
+		```
+
 At this point your machine should be setup for local development.  Please refer back to the main [README](../README.md) for details on doing development locally.
 	
